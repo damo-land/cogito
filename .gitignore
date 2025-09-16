@@ -24,6 +24,11 @@ out/
 *.swo
 *~
 
+# AI/Development tooling directories
+.cursor/
+.claude/
+.bmad-core/
+
 # OS generated files
 .DS_Store
 .DS_Store?
