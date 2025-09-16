@@ -29,6 +29,10 @@ out/
 .claude/
 .bmad-core/
 
+# Development framework directories
+docs/
+tests/
+
 # OS generated files
 .DS_Store
 .DS_Store?
