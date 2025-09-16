@@ -44,14 +44,21 @@ const NewTab: React.FC = memo(() => {
             setIsDarkMode(true);
           }
 
-          // Load background preference
+          // Load background preference - force small image first for now
+          // TODO: Remove this override once we're happy with the new behavior
+          setShowBackground(false); // Small image first
+          
+          /* Commented out to override saved preference
           const savedBackground = await storageService.load('show-background', {
             useCache: true,
             background: false
           });
           if (savedBackground?.content === 'true') {
             setShowBackground(true);
+          } else if (savedBackground?.content === 'false') {
+            setShowBackground(false);
           }
+          */
 
           loadRandomImage();
         } catch (error) {
@@ -233,9 +240,7 @@ const NewTab: React.FC = memo(() => {
           opacity: showBackground ? (isDarkMode ? 0.9 : 0.95) : (isDarkMode ? 0.7 : 0.8),
           cursor: 'pointer'
         }} 
-        onClick={() => {
-          setShowBackground(!showBackground);
-        }}
+        onClick={toggleBackground}
         />
         
         {/* Editor Container */}
@@ -341,11 +346,21 @@ const NewTab: React.FC = memo(() => {
             }}
             aria-label="Toggle background image"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21,15 16,10 5,21"/>
-            </svg>
+{showBackground ? (
+              // Eye crossed (when background is covering - blinder mode)
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/>
+                <path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/>
+                <path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/>
+                <line x1="2" y1="2" x2="22" y2="22"/>
+              </svg>
+            ) : (
+              // Eye open (when background is small - editor visible)
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            )}
           </button>
           
           {/* Dark mode toggle */}
