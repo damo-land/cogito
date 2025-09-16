@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Cogito",
+  "name": "cogito",
   "version": "1.0.0",
-  "description": "Cogito - A privacy-first WYSIWYG markdown editor that replaces Chrome's new tab page with instant note-taking functionality",
+  "description": "cogito - a privacy-first WYSIWYG markdown editor that replaces Chrome's new tab page with instant note-taking functionality",
   "permissions": [
     "tabs",
     "storage",

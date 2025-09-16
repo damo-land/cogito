@@ -1,4 +1,4 @@
-# WYSIWYG Markdown Editor Chrome Extension
+# cogito - WYSIWYG Markdown Editor
 
 A privacy-first WYSIWYG markdown editor that replaces Chrome's new tab page with instant note-taking functionality.
 
@@ -21,11 +21,13 @@ A privacy-first WYSIWYG markdown editor that replaces Chrome's new tab page with
 
 1. Clone the repository
 2. Install dependencies:
+
    ```bash
    npm install
    ```
 
 3. Build the extension:
+
    ```bash
    npm run build:dev
    ```
@@ -71,6 +73,7 @@ wysiwyg-md-editor/
 ## Current Status
 
 ✅ **Story 1.1 Complete**: Chrome Extension Foundation Setup
+
 - Extension manifest and basic structure
 - Build configuration with Vite + TypeScript
 - Background script with error handling

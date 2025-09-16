@@ -1,7 +1,7 @@
 {
   "name": "cogito",
   "version": "1.0.0",
-  "description": "Cogito - A privacy-first WYSIWYG markdown editor Chrome extension",
+  "description": "cogito - a privacy-first WYSIWYG markdown editor Chrome extension",
   "type": "module",
   "scripts": {
     "dev": "vite build --watch --mode development",

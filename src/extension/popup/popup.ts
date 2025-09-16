@@ -1,4 +1,4 @@
-// Popup script for Cogito Chrome Extension
+// Popup script for cogito Chrome Extension
 
 document.addEventListener('DOMContentLoaded', () => {
   const openNewTabButton = document.getElementById('openNewTab');

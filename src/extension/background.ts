@@ -1,8 +1,8 @@
-// Background script for Cogito Chrome Extension
+// Background script for cogito Chrome Extension
 
 // Extension installation and update handling
 chrome.runtime.onInstalled.addListener((details) => {
-  console.log('Cogito installed:', details.reason);
+  console.log('cogito installed:', details.reason);
   
   if (details.reason === 'install') {
     console.log('Extension installed for the first time');
@@ -24,7 +24,7 @@ chrome.tabs.onCreated.addListener((tab) => {
 
 // Extension startup
 chrome.runtime.onStartup.addListener(() => {
-  console.log('Chrome startup - Cogito ready');
+  console.log('Chrome startup - cogito ready');
 });
 
 // Error handling
@@ -39,7 +39,7 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 
 // Basic error logging
 const logError = (error: Error, context: string) => {
-  console.error(`[Cogito] Error in ${context}:`, error);
+  console.error(`[cogito] Error in ${context}:`, error);
   // Store error info for debugging
   chrome.storage.local.get(['errorLog'], (result) => {
     const errorLog = result.errorLog || [];
@@ -66,4 +66,4 @@ self.addEventListener('unhandledrejection', (event) => {
   logError(new Error(event.reason), 'unhandled-promise');
 });
 
-console.log('Cogito background script loaded');
+console.log('cogito background script loaded');
