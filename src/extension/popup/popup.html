@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cogito</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      width: 300px;
+      padding: 20px;
+      font-family: "Noto Sans Mono", "Roboto Mono", "Courier New", monospace;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .status {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 15px;
+    }
+    .button {
+      background: #f59e0b;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .button:hover {
+      background: #d97706;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h3>Cogito</h3>
+  </div>
+  <div class="status">
+    <p>✅ Extension Active</p>
+    <p>New tabs will show the markdown editor</p>
+  </div>
+  <button class="button" id="openNewTab">Open New Tab</button>
+  <script type="module" src="./popup.ts"></script>
+</body>
+</html>

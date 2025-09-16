@@ -1,0 +1,308 @@
+/* Performance-optimized animations for wysiwyg-md editor */
+
+/* Motion preference support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* GPU acceleration for transforms */
+.performance-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Toolbar animations */
+.toolbar-button {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+.toolbar-button:hover {
+  transform: translateY(-1px) translateZ(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+}
+
+.toolbar-button:active {
+  transform: translateY(0) translateZ(0);
+  transition-duration: 0.05s;
+}
+
+.toolbar-button.active {
+  background-color: var(--color-primary, #f59e0b);
+  color: white;
+  transform: translateZ(0);
+}
+
+/* Optimized skeleton loading */
+.toolbar-button-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  margin: 2px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Editor focus transitions */
+.editor-container {
+  transition: box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: box-shadow;
+}
+
+.editor-container:focus-within {
+  box-shadow: 0 0 0 2px rgba(0, 122, 204, 0.3);
+  outline: none;
+}
+
+/* Smooth typing indicators */
+.typing-indicator {
+  opacity: 0;
+  transform: scale(0.8) translateZ(0);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.typing-indicator.active {
+  opacity: 1;
+  transform: scale(1) translateZ(0);
+}
+
+/* Virtualized content animations - removed unused styles */
+
+/* Loading states with skeleton screens */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+.skeleton-text {
+  height: 1em;
+  margin: 0.5em 0;
+  border-radius: 4px;
+}
+
+.skeleton-text.wide {
+  width: 80%;
+}
+
+.skeleton-text.medium {
+  width: 60%;
+}
+
+.skeleton-text.narrow {
+  width: 40%;
+}
+
+/* Performance optimized fade transitions */
+.fade-enter {
+  opacity: 0;
+  transform: translateZ(0);
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translateZ(0);
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
+}
+
+/* Link dialog animations */
+.link-dialog-overlay {
+  background-color: rgba(0, 0, 0, 0);
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link-dialog-overlay.open {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.link-dialog-content {
+  transform: scale(0.9) translateZ(0);
+  opacity: 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.link-dialog-content.open {
+  transform: scale(1) translateZ(0);
+  opacity: 1;
+}
+
+/* Save indicator */
+.save-indicator {
+  opacity: 0;
+  transform: translateX(10px) translateZ(0);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.save-indicator.saving {
+  opacity: 1;
+  transform: translateX(0) translateZ(0);
+  color: #ffa500;
+}
+
+.save-indicator.saved {
+  opacity: 1;
+  transform: translateX(0) translateZ(0);
+  color: #28a745;
+}
+
+.save-indicator.error {
+  opacity: 1;
+  transform: translateX(0) translateZ(0);
+  color: #dc3545;
+}
+
+/* Performance monitor display - simplified */
+.performance-indicator {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.performance-indicator.visible {
+  opacity: 1;
+}
+
+.performance-indicator.critical {
+  border-left: 3px solid #dc3545;
+}
+
+/* Memory pressure warning */
+.memory-warning {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 12px 16px;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%) translateZ(0);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+}
+
+.memory-warning.visible {
+  transform: translateX(0) translateZ(0);
+}
+
+/* Optimized scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Responsive animations for mobile */
+@media (max-width: 768px) {
+  .toolbar-button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+  
+  .performance-indicator {
+    bottom: 60px; /* Account for mobile UI */
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .toolbar-button {
+    border: 1px solid currentColor;
+  }
+  
+  .skeleton {
+    background: repeating-linear-gradient(
+      90deg,
+      #000 0px,
+      #000 1px,
+      transparent 1px,
+      transparent 4px
+    );
+  }
+}
+
+/* Focus indicators for accessibility */
+.focus-visible {
+  outline: 2px solid var(--color-primary, #f59e0b);
+  outline-offset: 2px;
+}
+
+/* Optimize for 60fps animations */
+@media (min-resolution: 1.5dppx) {
+  .performance-accelerated,
+  .toolbar-button,
+  .editor-container,
+  .virtualized-chunk {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Container queries for responsive animations */
+@container (max-width: 600px) {
+  .toolbar-button {
+    transition-duration: 0.1s;
+  }
+}
+
+/* Print styles - disable animations */
+@media print {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .performance-indicator,
+  .memory-warning,
+  .save-indicator {
+    display: none !important;
+  }
+}

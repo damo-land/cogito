@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Input Rule Debug</title>
+    <script src="https://unpkg.com/prosemirror-model@1.19.0/dist/index.js"></script>
+    <script src="https://unpkg.com/prosemirror-state@1.4.2/dist/index.js"></script>
+    <script src="https://unpkg.com/prosemirror-view@1.31.0/dist/index.js"></script>
+    <script src="https://unpkg.com/prosemirror-inputrules@1.2.1/dist/index.js"></script>
+</head>
+<body>
+    <div id="editor"></div>
+    <div id="debug"></div>
+    
+    <script>
+        const { Schema, DOMParser } = PM.model;
+        const { EditorState, TextSelection } = PM.state;
+        const { EditorView } = PM.view;
+        const { inputRules, InputRule } = PM.inputrules;
+
+        // Simple schema with paragraph and horizontal_rule
+        const schema = new Schema({
+            nodes: {
+                doc: { content: "block+" },
+                paragraph: {
+                    content: "text*",
+                    group: "block",
+                    parseDOM: [{ tag: "p" }],
+                    toDOM() { return ["p", 0]; }
+                },
+                horizontal_rule: {
+                    group: "block",
+                    parseDOM: [{ tag: "hr" }],
+                    toDOM() { return ["hr"]; }
+                },
+                text: { group: "inline" }
+            }
+        });
+
+        // Test different HR input rule approaches
+        function createHRRule1() {
+            return new InputRule(
+                /^---\s$/,
+                (state, match, start, end) => {
+                    const { tr } = state;
+                    const $start = tr.doc.resolve(start);
+                    
+                    if ($start.parent.type.name === 'paragraph') {
+                        const from = $start.start($start.depth);
+                        const to = $start.end($start.depth);
+                        
+                        const hr = schema.nodes.horizontal_rule.create();
+                        tr.replaceWith(from, to, hr);
+                        
+                        console.log('HR Rule 1 triggered:', { from, to, docSize: tr.doc.content.size });
+                        return tr;
+                    }
+                    return null;
+                }
+            );
+        }
+
+        function createHRRule2() {
+            return new InputRule(
+                /^---\s$/,
+                (state, match, start, end) => {
+                    const { tr } = state;
+                    const $start = tr.doc.resolve(start);
+                    
+                    if ($start.parent.type.name === 'paragraph') {
+                        const from = $start.start($start.depth);
+                        const to = $start.end($start.depth);
+                        
+                        const hr = schema.nodes.horizontal_rule.create();
+                        const newP = schema.nodes.paragraph.create();
+                        
+                        tr.replaceWith(from, to, [hr, newP]);
+                        tr.setSelection(TextSelection.create(tr.doc, from + 1));
+                        
+                        console.log('HR Rule 2 triggered:', { from, to, docSize: tr.doc.content.size });
+                        return tr;
+                    }
+                    return null;
+                }
+            );
+        }
+
+        // Create editor with rule 1
+        let view = new EditorView(document.getElementById('editor'), {
+            state: EditorState.create({
+                schema,
+                plugins: [inputRules({ rules: [createHRRule1()] })]
+            }),
+            dispatchTransaction(tr) {
+                console.log('Transaction:', {
+                    steps: tr.steps.length,
+                    docBefore: tr.before.content.size,
+                    docAfter: tr.doc.content.size,
+                    selection: tr.selection.from + '-' + tr.selection.to
+                });
+                
+                const newState = view.state.apply(tr);
+                view.updateState(newState);
+                
+                // Show debug info
+                const debug = document.getElementById('debug');
+                debug.innerHTML = `
+                    <h3>Debug Info:</h3>
+                    <p>Doc size: ${newState.doc.content.size}</p>
+                    <p>Selection: ${newState.selection.from}-${newState.selection.to}</p>
+                    <p>Content: ${JSON.stringify(newState.doc.textContent)}</p>
+                    <h4>Doc structure:</h4>
+                    <pre>${JSON.stringify(newState.doc.toJSON(), null, 2)}</pre>
+                `;
+            }
+        });
+
+        // Test functions
+        window.testRule1 = () => {
+            view.destroy();
+            view = new EditorView(document.getElementById('editor'), {
+                state: EditorState.create({
+                    schema,
+                    plugins: [inputRules({ rules: [createHRRule1()] })]
+                }),
+                dispatchTransaction: view.props.dispatchTransaction
+            });
+            console.log('Switched to Rule 1');
+        };
+
+        window.testRule2 = () => {
+            view.destroy();
+            view = new EditorView(document.getElementById('editor'), {
+                state: EditorState.create({
+                    schema,
+                    plugins: [inputRules({ rules: [createHRRule2()] })]
+                }),
+                dispatchTransaction: view.props.dispatchTransaction
+            });
+            console.log('Switched to Rule 2');
+        };
+
+        console.log('Test page loaded. Type "test", press Enter, then "---" + space');
+        console.log('Use testRule1() or testRule2() to switch between implementations');
+    </script>
+</body>
+</html>

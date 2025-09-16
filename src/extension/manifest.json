@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Cogito",
+  "version": "1.0.0",
+  "description": "Cogito - A privacy-first WYSIWYG markdown editor that replaces Chrome's new tab page with instant note-taking functionality",
+  "permissions": [
+    "tabs",
+    "storage",
+    "activeTab",
+    "management"
+  ],
+  "chrome_url_overrides": {
+    "newtab": "newtab.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
