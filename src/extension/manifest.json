@@ -5,9 +5,7 @@
   "description": "cogito - a privacy-first WYSIWYG markdown editor that replaces Chrome's new tab page with instant note-taking functionality",
   "permissions": [
     "tabs",
-    "storage",
-    "activeTab",
-    "management"
+    "storage"
   ],
   "chrome_url_overrides": {
     "newtab": "newtab.html"
