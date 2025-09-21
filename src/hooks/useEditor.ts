@@ -74,20 +74,26 @@ export const useEditor = (options: UseEditorOptions = {}): UseEditorReturn => {
       error: null,
     }));
 
-    // Auto-save
+    // Auto-save with immediate response for critical changes
     if (onSave && autoSaveDelay > 0) {
       if (autoSaveTimeoutRef.current) {
         clearTimeout(autoSaveTimeoutRef.current);
       }
 
+      // Use a very short delay for near-immediate saving
+      // This still provides debouncing for rapid typing but saves quickly
+      const saveDelay = Math.min(autoSaveDelay, 100); // Cap at 100ms maximum
+      
       autoSaveTimeoutRef.current = setTimeout(async () => {
         try {
+          console.log('💾 Auto-saving content...');
           await onSave(content);
           setEditorState(prev => ({
             ...prev,
             lastSaved: new Date(),
             isModified: false,
           }));
+          console.log('✅ Auto-save completed');
         } catch (error) {
           console.error('Auto-save failed:', error);
           setEditorState(prev => ({
@@ -96,7 +102,7 @@ export const useEditor = (options: UseEditorOptions = {}): UseEditorReturn => {
           }));
           onError?.(error as Error);
         }
-      }, autoSaveDelay);
+      }, saveDelay);
     }
   }, [initialContent, onSave, autoSaveDelay, onError]);
 

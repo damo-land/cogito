@@ -3,6 +3,40 @@ import Editor from '../components/editor/Editor';
 import PerformanceMonitor from '../utils/performance';
 import { OptimizedStorageService } from '../services/storage/OptimizedStorageService';
 
+/**
+ * Get default welcome content for first-time users
+ * Shows only the markdown features that are currently supported
+ */
+const getDefaultContent = (): string => {
+  return `# Welcome to Cogito!
+
+Start typing to edit this text. Here's what you can do:
+
+## Text Formatting
+**Bold text** and *italic text* work great.
+You can also use \`inline code\` for snippets.
+
+## Lists
+- Bullet points
+- Another item
+  
+1. Numbered lists
+2. Work too
+
+## Tasks
+- [ ] Unchecked task
+- [x] Completed task
+
+## Links & More
+[Create links](https://example.com) easily.
+
+> Use blockquotes for emphasis
+
+---
+
+*This default text will be saved when you start editing. Happy writing!*`;
+};
+
 const NewTab: React.FC = memo(() => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasConflicts, setHasConflicts] = useState(false);
@@ -33,6 +67,12 @@ const NewTab: React.FC = memo(() => {
             setInitialContent(savedDocument.content);
             setCurrentContent(savedDocument.content);
             console.log('📂 Loaded saved content:', savedDocument.content.length, 'characters');
+          } else {
+            // First-time user - show default content
+            const defaultContent = getDefaultContent();
+            setInitialContent(defaultContent);
+            setCurrentContent(defaultContent);
+            console.log('✨ First-time user - showing default content');
           }
 
           // Load dark mode preference
@@ -73,6 +113,12 @@ const NewTab: React.FC = memo(() => {
               if (savedDocument?.content) {
                 setInitialContent(savedDocument.content);
                 console.log('✅ Content loaded on retry');
+              } else {
+                // First-time user - show default content on retry too
+                const defaultContent = getDefaultContent();
+                setInitialContent(defaultContent);
+                setCurrentContent(defaultContent);
+                console.log('✨ First-time user - showing default content on retry');
               }
             } catch (retryError) {
               console.warn('Retry also failed:', retryError);
@@ -274,8 +320,8 @@ const NewTab: React.FC = memo(() => {
                 setCurrentContent(content);
                 console.log('💾 Saving content...');
                 const result = await storageService.save('current-document', content, {
-                  compress: false, // Disable compression for now to fix hanging issue
-                  background: false,
+                  compress: false, // Disable compression for immediate saves
+                  background: false, // Keep foreground for immediate saves to ensure reliability
                   priority: 'high'
                 });
                 console.log('✅ Content saved successfully');
@@ -285,7 +331,7 @@ const NewTab: React.FC = memo(() => {
                 setIsSaving(false);
               }
             }}
-            autoSaveDelay={2000}
+            autoSaveDelay={100}
           />
         </div>
         
