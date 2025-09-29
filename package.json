@@ -1,6 +1,6 @@
 {
   "name": "cogito",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "cogito - a privacy-first WYSIWYG markdown editor Chrome extension",
   "type": "module",
   "scripts": {
